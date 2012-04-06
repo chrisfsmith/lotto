@@ -1,3 +1,3 @@
-# Grails: Lucky Lotto application
+# Grails: Lucky Lotto Application
 
-This is the sample application.
+This is a sample application.
