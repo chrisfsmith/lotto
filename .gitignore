@@ -1,0 +1,19 @@
+# .gitignore for Grails 2.0.3
+
+# IDE support files
+.classpath
+.project
+.settings
+*.iml
+*.ipr
+*.iws
+.idea
+
+# project release file
+*.war
+
+target/**
+out/**
+
+stacktrace.log
+
