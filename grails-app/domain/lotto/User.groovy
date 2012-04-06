@@ -10,10 +10,18 @@ class User {
 	boolean accountExpired
 	boolean accountLocked
 	boolean passwordExpired
+    String firstName
+    String lastName
+    String email
+
+    static hasMany = [registrations:Registration]
 
 	static constraints = {
 		username blank: false, unique: true
 		password blank: false
+        firstName blank:false
+        lastName blank:false
+        email email:true
 	}
 
 	static mapping = {
@@ -34,7 +42,11 @@ class User {
 		}
 	}
 
-	protected void encodePassword() {
+    String toString(){
+        "${lastName}, ${firstName} (${email})"
+    }
+
+    protected void encodePassword() {
 		password = springSecurityService.encodePassword(password)
 	}
 }

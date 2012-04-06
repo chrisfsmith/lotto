@@ -4,10 +4,15 @@ class Registration {
 
     Date dateCreated
 
+    static belongsTo = [event:Event, attendee:User]
+
     static constraints = {
+        attendee()
+        event()
+        dateCreated()
     }
 
-//    static mapping = {
-//        autoTimestamp true
-//    }
+    String toString(){
+        return "${event} : ${attendee}"
+    }
 }
