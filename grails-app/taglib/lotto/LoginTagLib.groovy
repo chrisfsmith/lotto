@@ -10,7 +10,7 @@ class LoginTagLib {
     def loginControl = {
         if (springSecurityService.isLoggedIn()) {
             def user = springSecurityService.currentUser
-            out << "Hello ${user?.getFirstName()} "
+            out << "${user?.getFirstName()} ${user?.getLastName()} "
             out << """[${
                 link(controller: "logout") {"Logout"}
             }]"""

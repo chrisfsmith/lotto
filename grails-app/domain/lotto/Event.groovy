@@ -9,6 +9,7 @@ class Event {
     Integer maxAttendees = 1
 
     static hasMany = [registrations:Registration]
+    static belongsTo = [lottery:Lottery]
 
     static constraints = {
         name blank: false, maxSize: 50
