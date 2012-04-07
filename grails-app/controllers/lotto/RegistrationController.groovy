@@ -2,5 +2,5 @@ package lotto
 
 class RegistrationController {
 
-    static scaffold = true
+    static scaffold = Registration
 }

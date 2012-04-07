@@ -53,5 +53,6 @@ grails.project.dependency.resolution = {
         compile ":spring-security-core:1.2.7.2"
         compile ":build-test-data:2.0.2"
         test ":code-coverage:1.2.5"
+        compile ":searchable:0.6.3"
     }
 }
