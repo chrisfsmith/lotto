@@ -1,6 +1,9 @@
 package lotto
 
 class FooterTagLib {
+
+    static namespace = 'lotto'
+
     def thisYear = {
         out << new Date().format("yyyy")
     }

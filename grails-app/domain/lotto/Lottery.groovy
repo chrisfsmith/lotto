@@ -19,6 +19,10 @@ class Lottery {
         lastUpdated()
     }
 
+    static mapping = {
+        sort "dateCreated"
+    }
+
     String toString() {
         return "${name} (" + (completed ? "completed" : "in progress") + ")"
     }

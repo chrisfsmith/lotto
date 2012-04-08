@@ -6,6 +6,6 @@
     <p class="header-sub">Are you feeling lucky?</p>
 
     <div id="loginHeader">
-        <g:loginControl/>
+        <lotto:loginControl/>
     </div>
 </div>

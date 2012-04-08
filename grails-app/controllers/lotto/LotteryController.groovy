@@ -1,17 +1,21 @@
 package lotto
 
 import org.springframework.dao.DataIntegrityViolationException
+import grails.plugins.springsecurity.Secured
 
+@Secured(['ROLE_ADMIN'])
 class LotteryController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def lotteryService
 
+    @Secured(['ROLE_ADMIN', 'ROLE_USER'])
     def index() {
         redirect(action: "list", params: params)
     }
 
+    @Secured(['ROLE_ADMIN', 'ROLE_USER'])
     def list() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         [lotteryInstanceList: Lottery.list(params), lotteryInstanceTotal: Lottery.count()]

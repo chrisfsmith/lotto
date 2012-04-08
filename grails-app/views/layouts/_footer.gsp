@@ -1,5 +1,6 @@
 <div id="footer">
     <hr/>
-    <g:copyright
-            startYear="2012">Smith Softworks</g:copyright>
+    <lotto:copyright
+            startYear="2012">Smith Softworks
+    </lotto:copyright>
 </div>
