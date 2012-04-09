@@ -2,6 +2,7 @@ package lotto
 
 import org.springframework.dao.DataIntegrityViolationException
 import grails.plugins.springsecurity.Secured
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 @Secured(['ROLE_ADMIN'])
 class LotteryController {
@@ -9,6 +10,7 @@ class LotteryController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def lotteryService
+    def springSecurityService
 
     @Secured(['ROLE_ADMIN', 'ROLE_USER'])
     def index() {
@@ -18,7 +20,12 @@ class LotteryController {
     @Secured(['ROLE_ADMIN', 'ROLE_USER'])
     def list() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [lotteryInstanceList: Lottery.list(params), lotteryInstanceTotal: Lottery.count()]
+        if (SpringSecurityUtils.ifAllGranted("ROLE_ADMIN")) {
+            [lotteryInstanceList: Lottery.list(params), lotteryInstanceTotal: Lottery.count()]
+        } else {
+            def results = lotteryService.getLotteriesForUser(springSecurityService.getCurrentUser(), params)
+            [lotteryInstanceList: results, lotteryInstanceTotal: results.totalCount]
+        }
     }
 
     def create() {
@@ -27,7 +34,7 @@ class LotteryController {
 
     def save() {
         def lotteryInstance = new Lottery(params)
-        lotteryInstance.users = lotteryService.generatePickOrder(lotteryInstance.users)
+        lotteryService.setupPickOrder(lotteryInstance)
         if (!lotteryInstance.save(flush: true)) {
             render(view: "create", model: [lotteryInstance: lotteryInstance])
             return
@@ -79,7 +86,11 @@ class LotteryController {
         }
 
         lotteryInstance.properties = params
-        lotteryInstance.users = lotteryService.generatePickOrder(lotteryInstance.users)
+        if (!params.users) {
+            lotteryInstance.users = null;
+        }
+
+        lotteryService.setupPickOrder(lotteryInstance)
 
         if (!lotteryInstance.save(flush: true)) {
             render(view: "edit", model: [lotteryInstance: lotteryInstance])

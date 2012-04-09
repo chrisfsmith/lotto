@@ -64,7 +64,7 @@ class BootStrap {
                 if (Lottery.count == 0) {
                     lottery1 = new Lottery(name: '2011 Wild Season', completed: true)
                     lottery1.save()
-                    lottery2 = new Lottery(name: '2012 Twins Season', completed: false)
+                    lottery2 = new Lottery(name: '2012 Twins Season', completed: false, users: [user1, user5, user4, user2], pickIndex: 1)
                     lottery2.save()
                 }
 

@@ -64,6 +64,17 @@
             </li>
         </g:if>
 
+        %{--<g:if test="${lotteryInstance?.pickIndex}">--}%
+            <li class="fieldcontain">
+                <span id="pickIndex-label" class="property-label"><g:message code="lottery.pickIndex.label"
+                                                                             default="Pick Index"/></span>
+
+                <span class="property-value" aria-labelledby="pickIndex-label"><g:fieldValue bean="${lotteryInstance}"
+                                                                                                    field="pickIndex"/></span>
+
+            </li>
+        %{--</g:if>--}%
+
         <g:if test="${lotteryInstance?.completed}">
             <li class="fieldcontain">
                 <span id="completed-label" class="property-label"><g:message code="lottery.completed.label"

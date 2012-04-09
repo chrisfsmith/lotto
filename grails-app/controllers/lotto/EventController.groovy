@@ -2,11 +2,14 @@ package lotto
 
 import org.springframework.dao.DataIntegrityViolationException
 import grails.plugins.springsecurity.Secured
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 @Secured(['ROLE_ADMIN'])
 class EventController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+
+    def eventService
 
     @Secured(['ROLE_ADMIN', 'ROLE_USER'])
     def index() {
@@ -16,7 +19,12 @@ class EventController {
     @Secured(['ROLE_ADMIN', 'ROLE_USER'])
     def list() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [eventInstanceList: Event.list(params), eventInstanceTotal: Event.count()]
+        if (SpringSecurityUtils.ifAllGranted("ROLE_ADMIN")) {
+            [eventInstanceList: Event.list(params), eventInstanceTotal: Event.count()]
+        } else {
+            def results = eventService.getEvents(params)
+            [eventInstanceList: results, eventInstanceTotal: results.totalCount]
+        }
     }
 
     def create() {

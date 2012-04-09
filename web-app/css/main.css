@@ -592,7 +592,7 @@ a.skip {
 
 /* Lotto Customization */
 #header {
-    background: #5882FA;
+    background: #48802c;
     padding: 2em 1em 2em 1em;
     margin-bottom: 1em;
 }
@@ -634,4 +634,7 @@ a.header-main:link, a.header-main:visited {
 .question {
     font-style: italic;
     font-weight: bold;
+}
+.info {
+    margin: 1em;
 }

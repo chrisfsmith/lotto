@@ -12,48 +12,62 @@
     <meta http-equiv="Content-Type"
           content="text/html; charset=UTF-8"/>
     <meta name="layout" content="main"/>
-    <title>Lotto</title>
+    <title>Event List</title>
 </head>
 
 <body>
-<div class="body">
+<div id="list-event" class="body content scaffold-list" role="main">
     <g:if test="${flash.message}">
         <div class="message">${flash.message}</div>
     </g:if>
-    <g:each in="${eventInstanceList}"
-            status="i" var="eventInstance">
-        <div class="event">
-            <h2>${eventInstance.name}</h2>
 
-            <p class="event-details">
-                <span class="question">What?</span>
-                <span class="answer">
-                    ${eventInstance.description}</span>
-            </p>
+    <h1><g:message code="default.list.label" args="[entityName]"/></h1>
+    <g:if test="${eventInstanceList.size() == 0}">
+        <p class="info">Sorry, there are no events for this lottery.</p>
+    </g:if>
+    <g:else>
+        <g:each in="${eventInstanceList}"
+                status="i" var="eventInstance">
+            <div class="event">
+                <h2>${eventInstance.name}</h2>
 
-            <p class="event-details">
-                <span class="question">When?</span>
-                <span class="answer">
-                    ${eventInstance.startDate.
-                            format("EEEE, MMMM d, yyyy HH:mm")}</span>
-            </p>
+                <p class="event-details">
+                    <span class="question">What?</span>
+                    <span class="answer">
+                        ${eventInstance.description}</span>
+                </p>
 
-            <p class="event-details">
-                <span class="question">How Much?</span>
-                <span class="answer">
-                    <g:formatNumber
-                            number="${eventInstance.cost}"
-                            format="\$###,##0"/></span>
-            </p>
+                <p class="event-details">
+                    <span class="question">When?</span>
+                    <span class="answer">
+                        ${eventInstance.startDate.
+                                format("EEEE, MMMM d, yyyy HH:mm")}</span>
+                </p>
 
-            <p class="event-details">
-                <span class="question">How Many?</span>
-                <span class="answer">
-                    <g:formatNumber
-                            number="${eventInstance.maxAttendees}"/></span>
-            </p>
-        </div>
-    </g:each>
+                <p class="event-details">
+                    <span class="question">How Much?</span>
+                    <span class="answer">
+                        <g:formatNumber
+                                number="${eventInstance.cost}"
+                                format="\$###,##0"/></span>
+                </p>
+
+                <p class="event-details">
+                    <span class="question">Max Attendees?</span>
+                    <span class="answer">
+                        <g:formatNumber
+                                number="${eventInstance.maxAttendees}"/></span>
+                </p>
+
+                <p class="event-details">
+                    <span class="question">How Many Left?</span>
+                    <span class="answer">
+                        <g:formatNumber
+                                number="${eventInstance.maxAttendees - eventInstance.registrations.size()}"/></span>
+                </p>
+            </div>
+        </g:each>
+    </g:else>
     <div class="paginateButtons">
         <g:paginate total="${eventInstanceTotal}"/>
     </div>

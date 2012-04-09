@@ -5,6 +5,7 @@ class Lottery {
     String name
     Boolean completed
     List users
+    Integer pickIndex
     Date dateCreated
     Date lastUpdated
 
@@ -15,6 +16,7 @@ class Lottery {
         events()
         users()
         completed()
+        pickIndex nullable: true
         dateCreated()
         lastUpdated()
     }
