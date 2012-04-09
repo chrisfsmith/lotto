@@ -4,16 +4,18 @@ package lotto
 
 import org.junit.*
 import grails.test.mixin.*
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import grails.orm.PagedResultList
 
 @TestFor(EventController)
-@Mock(Event)
+@Mock([Event, EventService, Lottery])
 class EventControllerTests {
 
 
     def populateValidParams(params) {
-      assert params != null
-      // TODO: Populate valid properties like...
-      //params["name"] = 'someValidName'
+        assert params != null
+        // TODO: Populate valid properties like...
+        //params["name"] = 'someValidName'
     }
 
     void testIndex() {
@@ -22,6 +24,12 @@ class EventControllerTests {
     }
 
     void testList() {
+        SpringSecurityUtils.metaClass.'static'.ifAllGranted = { String role ->
+            return false
+        }
+        def control = mockFor(EventService)
+        control.demand.getEvents { lottery, params -> new PagedResultList(null, null) }
+        controller.eventService = control.createMock()
 
         def model = controller.list()
 
@@ -30,9 +38,9 @@ class EventControllerTests {
     }
 
     void testCreate() {
-       def model = controller.create()
+        def model = controller.create()
 
-       assert model.eventInstance != null
+        assert model.eventInstance != null
     }
 
     void testSave() {

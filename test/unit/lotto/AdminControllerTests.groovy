@@ -11,7 +11,9 @@ import org.junit.*
 @TestFor(AdminController)
 class AdminControllerTests {
 
-    void testSomething() {
-       fail "Implement me"
+    void testIndex() {
+        controller.index()
+        assert '' == response.text
+        assert null == response.redirectedUrl
     }
 }

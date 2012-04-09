@@ -1,14 +1,10 @@
-package lotto
-
-
-
 import grails.test.mixin.*
 
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
-@TestFor(IndexController)
-class IndexControllerTests {
+@TestFor(WelcomeController)
+class WelcomeControllerTests {
 
     void testSomething() {
         fail "Implement me"
