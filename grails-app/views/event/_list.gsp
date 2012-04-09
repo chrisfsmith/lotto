@@ -5,20 +5,11 @@
   Time: 11:14 PM
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page import="lotto.Lottery" %>
 
-<%@ page contentType="text/html;charset=UTF-8" %>
-<html>
-<head>
-    <meta http-equiv="Content-Type"
-          content="text/html; charset=UTF-8"/>
-    <meta name="layout" content="main"/>
-    <title>Event List</title>
-</head>
-
-<body>
-<div id="list-event" class="body content scaffold-list" role="main">
+<div id="list-lottery" class="body content scaffold-list" role="main">
     <g:if test="${flash.message}">
-        <div class="message">${flash.message}</div>
+        <div class="message" role="status">${flash.message}</div>
     </g:if>
 
     <h1><g:message code="default.list.label" args="[entityName]"/></h1>
@@ -59,18 +50,28 @@
                                 number="${eventInstance.maxAttendees}"/></span>
                 </p>
 
+                <% howManyLeft = eventInstance.maxAttendees - (eventInstance.registrations ? eventInstance.registrations.size() : 0) %>
                 <p class="event-details">
                     <span class="question">How Many Left?</span>
                     <span class="answer">
                         <g:formatNumber
-                                number="${eventInstance.maxAttendees - eventInstance.registrations.size()}"/></span>
+                                number="${howManyLeft}"/></span>
                 </p>
+
+                <g:if test="${howManyLeft > 0}">
+                    <p class="event-details">
+                        <g:link controller="lottery" action="pick"
+                                params="[lottery: params.lottery, event: eventInstance.id]">
+                            Pick
+                        </g:link>
+                    </p>
+                </g:if>
+
             </div>
         </g:each>
     </g:else>
-    <div class="paginateButtons">
-        <g:paginate total="${eventInstanceTotal}"/>
+
+    <div class="pagination">
+        <g:paginate total="${eventInstanceTotal}" params="[lottery: params.lottery]"/>
     </div>
 </div>
-</body>
-</html>

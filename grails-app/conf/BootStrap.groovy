@@ -74,13 +74,13 @@ class BootStrap {
                 def event4
                 if (Event.count == 0) {
                     event1 = new Event(name: 'Game 1', description: 'Twins vs. Angels', startDate: (new Date() + 20),
-                            cost: 60.0, maxAttendees: 4, lottery: lottery2)
+                            cost: 60.0, maxAttendees: 2, lottery: lottery2)
                     event1.save()
                     event2 = new Event(name: 'Game 2', description: 'Twins vs. Rangers', startDate: (new Date() + 30),
                             cost: 60.0, maxAttendees: 4, lottery: lottery2)
                     event2.save()
                     event3 = new Event(name: 'Game 3', description: 'Twins vs. Rangers', startDate: (new Date() + 31),
-                            cost: 60.0, maxAttendees: 8, lottery: lottery2)
+                            cost: 60.0, maxAttendees: 4, lottery: lottery2)
                     event3.save()
                     event4 = new Event(name: 'Game 1', description: 'Wild vs. Ducks', startDate: (new Date() + 1),
                             cost: 40.0, maxAttendees: 2, lottery: lottery1)
@@ -90,10 +90,12 @@ class BootStrap {
                 if (Registration.count == 0) {
                     def reg1 = new Registration(attendee: user1, event: event1)
                     reg1.save()
-                    def reg2 = new Registration(attendee: user2, event: event4)
+                    def reg2 = new Registration(attendee: user5, event: event1)
                     reg2.save()
                     def reg3 = new Registration(attendee: user2, event: event4)
                     reg3.save()
+                    def reg4 = new Registration(attendee: user2, event: event4)
+                    reg4.save()
                 }
 
                 break

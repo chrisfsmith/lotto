@@ -26,6 +26,23 @@ class Lottery {
     }
 
     String toString() {
-        return "${name} (" + (completed ? "completed" : "in progress") + ")"
+        "${name}" + (completed ? "(completed)" : "")
+    }
+
+    User getPicker() {
+        def picker
+        if (pickIndex != null && pickIndex < users.size()) {
+            picker = users[pickIndex]
+        }
+        picker
+    }
+
+    void incrementPickIndex() {
+        if (!completed && pickIndex) {
+            ++pickIndex
+            if (pickIndex >= users.size()) {
+                pickIndex = 0;
+            }
+        }
     }
 }

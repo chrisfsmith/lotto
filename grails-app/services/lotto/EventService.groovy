@@ -4,11 +4,10 @@ import grails.orm.PagedResultList
 
 class EventService {
 
-    PagedResultList getEvents(params) {
-        def lotteryId = params.long('lottery')
+    PagedResultList getEvents(lottery, params) {
         def criteria = Event.createCriteria()
         def results = criteria.list(params) {
-            eq("lottery.id", lotteryId)
+            eq("lottery", lottery)
             order "startDate", "asc"
         }
         results

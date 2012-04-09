@@ -13,11 +13,12 @@
         <g:each in="${lotteryInstanceList}"
                 status="i" var="lotteryInstance">
             <div class="info">
-            <g:link controller="event" action="list" params="[lottery: lotteryInstance.id]">
-                ${lotteryInstance.name}
-            </g:link>
-
-
+                <g:link controller="event" action="list" params="[lottery: lotteryInstance.id]">
+                    ${lotteryInstance.name}
+                </g:link>
+                <p>
+                    Next picker: ${lotteryInstance.getPicker()}
+                </p>
             </div>
         </g:each>
     </g:else>

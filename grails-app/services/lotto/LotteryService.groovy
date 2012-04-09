@@ -35,4 +35,29 @@ class LotteryService {
         }
     }
 
+    boolean pick(lottery, user, event) {
+        log.debug "Picking " + event + " for " + user + " from " + lottery
+
+        if (!lottery || !user || !event) {
+            return false
+        }
+
+        if (event.lottery != lottery || event.isFull()) {
+            return false
+        }
+
+        def nextPicker = lottery.getPicker()
+        if (user == nextPicker) {
+            log.debug "attempt to register"
+            def reg = new Registration(attendee: user, event: event)
+            reg.save()
+            if (reg.hasErrors()) {
+                return false
+            } else {
+                lottery.incrementPickIndex()
+            }
+            return true
+        }
+        return false
+    }
 }

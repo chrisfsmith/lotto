@@ -119,4 +119,17 @@ class LotteryController {
             redirect(action: "show", id: params.id)
         }
     }
+
+    @Secured(['ROLE_ADMIN', 'ROLE_USER'])
+    def pick() {
+        def lotteryInstance = Lottery.get(params.lottery)
+        def userInstance = springSecurityService.getCurrentUser()
+        def eventInstance = Event.get(params.event)
+        if (lotteryService.pick(lotteryInstance, userInstance, eventInstance)) {
+            flash.message = message(code: 'default.picked.message', args: [eventInstance?.name])
+        } else {
+            flash.message = message(code: 'default.not.picked.message', args: [eventInstance?.name ?: message(code: 'event.not.exist', default: 'Nonexistent event')])
+        }
+        redirect(controller: "event", action: "list", params: params)
+    }
 }

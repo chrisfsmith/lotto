@@ -22,7 +22,7 @@ class EventController {
         if (SpringSecurityUtils.ifAllGranted("ROLE_ADMIN")) {
             [eventInstanceList: Event.list(params), eventInstanceTotal: Event.count()]
         } else {
-            def results = eventService.getEvents(params)
+            def results = eventService.getEvents(Lottery.get(params.lottery), params)
             [eventInstanceList: results, eventInstanceTotal: results.totalCount]
         }
     }
