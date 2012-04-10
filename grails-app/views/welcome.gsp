@@ -3,6 +3,12 @@
 <head>
     <meta name="layout" content="main"/>
     <title>Welcome to Lucky Lotto</title>
+    %{--<r:require modules="jquery-ui"/>--}%
+    %{--<r:script>--}%
+        %{--$(function() {--}%
+            %{--$('#form').dialog('open');--}%
+        %{--});--}%
+    %{--</r:script>--}%
 </head>
 
 <body>

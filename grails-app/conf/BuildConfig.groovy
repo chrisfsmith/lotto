@@ -43,7 +43,7 @@ grails.project.dependency.resolution = {
         runtime ":resources:1.1.6"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities
-        //runtime ":zipped-resources:1.0"
+        runtime ":zipped-resources:1.0"
         //runtime ":cached-resources:1.0"
         //runtime ":yui-minify-resources:0.1.4"
 
@@ -54,5 +54,7 @@ grails.project.dependency.resolution = {
         compile ":build-test-data:2.0.2"
         test ":code-coverage:1.2.5"
         compile ":searchable:0.6.3"
+        compile ":jquery-ui:1.8.15"
+        compile ":blueprint:1.0.2"
     }
 }
