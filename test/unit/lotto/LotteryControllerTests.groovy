@@ -6,7 +6,7 @@ import grails.test.mixin.TestFor
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 @TestFor(LotteryController)
-@Mock([Lottery, LotteryService, SpringSecurityService])
+@Mock([Lottery, LotteryService, SpringSecurityService, Event])
 class LotteryControllerTests {
 
 
@@ -14,6 +14,7 @@ class LotteryControllerTests {
         assert params != null
         params.name = 'name'
         params.completed = false
+        params.users = [new User()]
     }
 
     void testIndex() {
@@ -56,6 +57,10 @@ class LotteryControllerTests {
     }
 
     void testSave() {
+        def mockLotteryService = mockFor(LotteryService)
+        mockLotteryService.demand.setupPickOrder(2) {lottery -> }
+        controller.lotteryService = mockLotteryService.createMock()
+
         controller.save()
 
         assert model.lotteryInstance != null
@@ -69,6 +74,8 @@ class LotteryControllerTests {
         assert response.redirectedUrl == '/lottery/show/1'
         assert controller.flash.message != null
         assert Lottery.count() == 1
+        mockLotteryService.verify()
+
     }
 
     void testShow() {
@@ -110,6 +117,10 @@ class LotteryControllerTests {
     }
 
     void testUpdate() {
+        def mockLotteryService = mockFor(LotteryService)
+        mockLotteryService.demand.setupPickOrder(2) {lottery -> }
+        controller.lotteryService = mockLotteryService.createMock()
+
         controller.update()
 
         assert flash.message != null
@@ -135,8 +146,11 @@ class LotteryControllerTests {
         lottery.clearErrors()
 
         populateValidParams(params)
+        params.users = []
+        assert lottery.users != null
         controller.update()
 
+        assert lottery.users == null
         assert response.redirectedUrl == "/lottery/show/$lottery.id"
         assert flash.message != null
 
@@ -153,6 +167,7 @@ class LotteryControllerTests {
         assert model.lotteryInstance != null
         assert model.lotteryInstance.errors.getFieldError('version')
         assert flash.message != null
+        mockLotteryService.verify()
     }
 
     void testDelete() {
@@ -175,6 +190,27 @@ class LotteryControllerTests {
         assert Lottery.count() == 0
         assert Lottery.get(lottery.id) == null
         assert response.redirectedUrl == '/lottery/list'
+    }
+
+    void testPick() {
+        def mockLotteryService = mockFor(LotteryService)
+
+        mockLotteryService.demand.pick {lottery, user, event -> false }
+        controller.lotteryService = mockLotteryService.createMock()
+        params.lottery = '1'
+        params.event = '1'
+        controller.pick()
+        assert flash.message == 'default.not.picked.message'
+        assert response.redirectedUrl == '/event/list?lottery=1&event=1'
+        mockLotteryService.verify()
+
+        response.reset()
+
+        mockLotteryService.demand.pick {lottery, user, event -> true }
+        controller.pick()
+        assert flash.message == 'default.picked.message'
+        assert response.redirectedUrl == '/event/list?lottery=1&event=1'
+        mockLotteryService.verify()
     }
 
     def createMockPagedResultList = {

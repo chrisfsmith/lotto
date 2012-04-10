@@ -16,7 +16,7 @@ class Lottery {
         events()
         users()
         completed()
-        pickIndex nullable: true
+        pickIndex nullable: true, min: 0
         dateCreated()
         lastUpdated()
     }
@@ -38,7 +38,7 @@ class Lottery {
     }
 
     void incrementPickIndex() {
-        if (!completed && pickIndex) {
+        if (!completed && pickIndex != null) {
             ++pickIndex
             if (pickIndex >= users.size()) {
                 pickIndex = 0;

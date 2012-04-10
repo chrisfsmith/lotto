@@ -4,6 +4,16 @@ testDataConfig {
             def i = 1
             startDate = {-> new Date() + Integer.valueOf("${i++}")}
         }
+        'lotto.User' {
+            springSecurityService = {->
+                mockSpringSecurityService = new Object()
+                mockSpringSecurityService.metaClass.encodePassword {String password -> password }
+                mockSpringSecurityService
+            }
+
+            def i = 1
+            username = {-> "username${i++}" }
+        }
     }
 }
 
@@ -45,7 +55,6 @@ void setUp() {
     grails.buildtestdata.TestDataConfigurationHolder.reset()
 }
 */
-
 
 /*
 // if you'd like to disable the build-test-data plugin in an environment, just set

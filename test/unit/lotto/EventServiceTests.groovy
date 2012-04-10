@@ -15,13 +15,10 @@ class EventServiceTests {
     void testFindEventsWithAllHavingTheSameLottery() {
         def lottery = Lottery.build()
         def event1 = Event.build(lottery: lottery)
-        println event1
         event1.save()
         def event2 = Event.build(lottery: lottery)
-        println event2
         event2.save()
         def event3 = Event.build(lottery: lottery)
-        println event3
         event3.save()
 
         def results = service.findEventsByLottery(lottery, [max: 2, offset: 0])

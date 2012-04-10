@@ -1,9 +1,13 @@
 package lotto
 
-import grails.orm.PagedResultList
-
 class LotteryService {
 
+    /**
+     * Given a list of Users return a randomized list.
+     *
+     * @param users the Users to randomize
+     * @return a list contains users but in random order
+     */
     List<User> generatePickOrder(users) {
         log.debug "BEFORE ${users}"
         if (users) {
@@ -17,22 +21,29 @@ class LotteryService {
     /**
      * Get the active Lotteries associated with the provided User.
      * Return type is grails.orm.PagedResultList so that the
-     * pagination count is returned too.
+     * pagination count is returned too, but using def to
+     * support unit testing.
      *
      * @param user
      * @param params Pagination parameters such as offset, max etc.
      * @return PagedResultList
      */
-    PagedResultList findLotteriesByUser(user, params) {
+    def findLotteriesByUser(user, params) {
         def criteria = Lottery.createCriteria()
         def results = criteria.list(params) {
-            users {eq "username", user.getUsername()}
+            users {eq "id", user.id}
             eq "completed", false
             order "dateCreated", "asc"
         }
         results
     }
 
+    /**
+     * Generates a pick order for the provided lottery and sets the
+     * lottery's pickIndex.
+     *
+     * @param lottery
+     */
     void setupPickOrder(lottery) {
         lottery.users = generatePickOrder(lottery.users)
         if (lottery.users) {
@@ -44,6 +55,14 @@ class LotteryService {
         }
     }
 
+    /**
+     * Smarts for a User to pick an Event from a Lottery
+     *
+     * @param lottery
+     * @param user
+     * @param event
+     * @return true if the pick was successful; false otherwise
+     */
     boolean pick(lottery, user, event) {
         log.debug "Picking " + event + " for " + user + " from " + lottery
 
@@ -51,21 +70,19 @@ class LotteryService {
             return false
         }
 
-        if (event.lottery != lottery || event.isFull()) {
-            return false
-        }
-
-        def nextPicker = lottery.getPicker()
-        if (user == nextPicker) {
-            log.debug "attempt to register"
-            def reg = new Registration(attendee: user, event: event)
-            reg.save()
-            if (reg.hasErrors()) {
-                return false
-            } else {
-                lottery.incrementPickIndex()
+        if (event.lottery == lottery && !event.isFull()) {
+            def nextPicker = lottery.getPicker()
+            if (user == nextPicker) {
+                log.debug "attempt to register"
+                def reg = new Registration(attendee: user, event: event)
+                reg.save()
+                if (reg.hasErrors()) {
+                    return false
+                } else {
+                    lottery.incrementPickIndex()
+                }
+                return true
             }
-            return true
         }
         return false
     }

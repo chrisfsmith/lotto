@@ -12,6 +12,7 @@ class EventTests {
         mockForConstraintsTests(Event)
 
         def event = new Event()
+
         assertFalse event.validate()
 
         assertEquals "nullable", event.errors["name"]
@@ -25,9 +26,9 @@ class EventTests {
 
         def event = new Event(name: '', description: '', startDate: new Date() - 1, cost: Integer.MAX_VALUE,
                 maxAttendees: 0, lottery: new Lottery())
+
         assertFalse event.validate()
 
-        println event.errors
         assertEquals "blank", event.errors["name"]
         assertEquals "blank", event.errors["description"]
         assertEquals "validator", event.errors["startDate"]

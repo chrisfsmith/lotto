@@ -11,7 +11,13 @@ import org.junit.*
 @TestFor(Registration)
 class RegistrationTests {
 
-    void testSomething() {
-       fail "Implement me"
+    void testNullConstraints() {
+        mockForConstraintsTests(Registration)
+
+        def registration = new Registration()
+
+        assertFalse registration.validate()
+        assertEquals "nullable", registration.errors["event"]
+        assertEquals "nullable", registration.errors["attendee"]
     }
 }
