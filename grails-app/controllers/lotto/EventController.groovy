@@ -1,8 +1,8 @@
 package lotto
 
-import org.springframework.dao.DataIntegrityViolationException
 import grails.plugins.springsecurity.Secured
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import org.springframework.dao.DataIntegrityViolationException
 
 @Secured(['ROLE_ADMIN'])
 class EventController {
@@ -22,7 +22,7 @@ class EventController {
         if (SpringSecurityUtils.ifAllGranted("ROLE_ADMIN")) {
             [eventInstanceList: Event.list(params), eventInstanceTotal: Event.count()]
         } else {
-            def results = eventService.getEvents(Lottery.get(params.lottery), params)
+            def results = eventService.findEventsByLottery(Lottery.get(params.lottery), params)
             [eventInstanceList: results, eventInstanceTotal: results.totalCount]
         }
     }

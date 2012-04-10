@@ -1,9 +1,6 @@
 package lotto
 
-
-
-import grails.test.mixin.*
-import org.junit.*
+import grails.test.mixin.TestFor
 
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
@@ -12,8 +9,10 @@ import org.junit.*
 class AdminControllerTests {
 
     void testIndex() {
-        controller.index()
+        def model = controller.index()
+
         assert '' == response.text
         assert null == response.redirectedUrl
+        assert null == model
     }
 }

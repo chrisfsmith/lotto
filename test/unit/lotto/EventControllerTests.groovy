@@ -1,11 +1,8 @@
 package lotto
 
-
-
-import org.junit.*
-import grails.test.mixin.*
+import grails.test.mixin.Mock
+import grails.test.mixin.TestFor
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
-import grails.orm.PagedResultList
 
 @TestFor(EventController)
 @Mock([Event, EventService, Lottery])
@@ -14,8 +11,13 @@ class EventControllerTests {
 
     def populateValidParams(params) {
         assert params != null
-        // TODO: Populate valid properties like...
-        //params["name"] = 'someValidName'
+
+        params.name = 'name'
+        params.description = 'description'
+        params.startDate = new Date() + 1
+        params.cost = 10;
+        params.maxAttendees = 5;
+        params.lottery = new Lottery()
     }
 
     void testIndex() {
@@ -24,17 +26,37 @@ class EventControllerTests {
     }
 
     void testList() {
-        SpringSecurityUtils.metaClass.'static'.ifAllGranted = { String role ->
-            return false
+        def list = new ArrayList()
+        list.metaClass.getProperty = { propertyName ->
+            if (propertyName == 'totalCount') { 0 }
+            else { delegate }
         }
-        def control = mockFor(EventService)
-        control.demand.getEvents { lottery, params -> new PagedResultList(null, null) }
-        controller.eventService = control.createMock()
+
+        SpringSecurityUtils.metaClass.'static'.ifAllGranted = { String role -> return false }
+
+        def mockEventService = mockFor(EventService)
+        mockEventService.demand.findEventsByLottery {lottery, params -> return list }
+        controller.eventService = mockEventService.createMock()
 
         def model = controller.list()
 
         assert model.eventInstanceList.size() == 0
         assert model.eventInstanceTotal == 0
+        mockEventService.verify()
+    }
+
+    void testAdminList() {
+        SpringSecurityUtils.metaClass.'static'.ifAllGranted = { String role -> return true }
+
+        def mockEventService = mockFor(EventService)
+        mockEventService.demand.findEventsByLottery(0) {lottery, params -> return list }
+        controller.eventService = mockEventService.createMock()
+
+        def model = controller.list()
+
+        assert model.eventInstanceList.size() == 0
+        assert model.eventInstanceTotal == 0
+        mockEventService.verify()
     }
 
     void testCreate() {
@@ -113,7 +135,7 @@ class EventControllerTests {
 
         // test invalid parameters in update
         params.id = event.id
-        //TODO: add invalid values to params object
+        params.maxAttendees = -1
 
         controller.update()
 
