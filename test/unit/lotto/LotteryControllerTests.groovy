@@ -1,19 +1,19 @@
 package lotto
 
-
-
-import org.junit.*
-import grails.test.mixin.*
+import grails.plugins.springsecurity.SpringSecurityService
+import grails.test.mixin.Mock
+import grails.test.mixin.TestFor
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 @TestFor(LotteryController)
-@Mock(Lottery)
+@Mock([Lottery, LotteryService, SpringSecurityService])
 class LotteryControllerTests {
 
 
     def populateValidParams(params) {
-      assert params != null
-      // TODO: Populate valid properties like...
-      //params["name"] = 'someValidName'
+        assert params != null
+        params.name = 'name'
+        params.completed = false
     }
 
     void testIndex() {
@@ -22,17 +22,37 @@ class LotteryControllerTests {
     }
 
     void testList() {
+        SpringSecurityUtils.metaClass.'static'.ifAllGranted = { String role -> false }
+
+        def mockLotteryService = mockFor(LotteryService)
+        mockLotteryService.demand.findLotteriesByUser {user, params -> createMockPagedResultList() }
+        controller.lotteryService = mockLotteryService.createMock()
 
         def model = controller.list()
 
         assert model.lotteryInstanceList.size() == 0
         assert model.lotteryInstanceTotal == 0
+        mockLotteryService.verify()
+    }
+
+    void testAdminList() {
+        SpringSecurityUtils.metaClass.'static'.ifAllGranted = { String role -> true }
+
+        def mockLotteryService = mockFor(LotteryService)
+        mockLotteryService.demand.findLotteriesByUser(0) {lottery, params -> createMockPagedResultList() }
+        controller.lotteryService = mockLotteryService.createMock()
+
+        def model = controller.list()
+
+        assert model.lotteryInstanceList.size() == 0
+        assert model.lotteryInstanceTotal == 0
+        mockLotteryService.verify()
     }
 
     void testCreate() {
-       def model = controller.create()
+        def model = controller.create()
 
-       assert model.lotteryInstance != null
+        assert model.lotteryInstance != null
     }
 
     void testSave() {
@@ -105,7 +125,7 @@ class LotteryControllerTests {
 
         // test invalid parameters in update
         params.id = lottery.id
-        //TODO: add invalid values to params object
+        params.name = ''
 
         controller.update()
 
@@ -155,5 +175,15 @@ class LotteryControllerTests {
         assert Lottery.count() == 0
         assert Lottery.get(lottery.id) == null
         assert response.redirectedUrl == '/lottery/list'
+    }
+
+    def createMockPagedResultList = {
+        def list = new ArrayList()
+        list.metaClass.getProperty = { propertyName ->
+            if (propertyName == 'totalCount') { 0 }
+            else { delegate }
+        }
+
+        list
     }
 }

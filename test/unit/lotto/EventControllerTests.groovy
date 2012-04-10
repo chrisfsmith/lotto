@@ -26,16 +26,10 @@ class EventControllerTests {
     }
 
     void testList() {
-        def list = new ArrayList()
-        list.metaClass.getProperty = { propertyName ->
-            if (propertyName == 'totalCount') { 0 }
-            else { delegate }
-        }
-
-        SpringSecurityUtils.metaClass.'static'.ifAllGranted = { String role -> return false }
+        SpringSecurityUtils.metaClass.'static'.ifAllGranted = { String role -> false }
 
         def mockEventService = mockFor(EventService)
-        mockEventService.demand.findEventsByLottery {lottery, params -> return list }
+        mockEventService.demand.findEventsByLottery {lottery, params -> createMockPagedResultList() }
         controller.eventService = mockEventService.createMock()
 
         def model = controller.list()
@@ -46,10 +40,10 @@ class EventControllerTests {
     }
 
     void testAdminList() {
-        SpringSecurityUtils.metaClass.'static'.ifAllGranted = { String role -> return true }
+        SpringSecurityUtils.metaClass.'static'.ifAllGranted = { String role -> true }
 
         def mockEventService = mockFor(EventService)
-        mockEventService.demand.findEventsByLottery(0) {lottery, params -> return list }
+        mockEventService.demand.findEventsByLottery(0) {lottery, params -> createMockPagedResultList() }
         controller.eventService = mockEventService.createMock()
 
         def model = controller.list()
@@ -185,5 +179,15 @@ class EventControllerTests {
         assert Event.count() == 0
         assert Event.get(event.id) == null
         assert response.redirectedUrl == '/event/list'
+    }
+
+    def createMockPagedResultList = {
+        def list = new ArrayList()
+        list.metaClass.getProperty = { propertyName ->
+            if (propertyName == 'totalCount') { 0 }
+            else { delegate }
+        }
+
+        list
     }
 }

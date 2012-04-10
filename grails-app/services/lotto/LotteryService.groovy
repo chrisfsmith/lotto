@@ -14,7 +14,16 @@ class LotteryService {
         users
     }
 
-    PagedResultList getLotteriesForUser(user, params) {
+    /**
+     * Get the active Lotteries associated with the provided User.
+     * Return type is grails.orm.PagedResultList so that the
+     * pagination count is returned too.
+     *
+     * @param user
+     * @param params Pagination parameters such as offset, max etc.
+     * @return PagedResultList
+     */
+    PagedResultList findLotteriesByUser(user, params) {
         def criteria = Lottery.createCriteria()
         def results = criteria.list(params) {
             users {eq "username", user.getUsername()}

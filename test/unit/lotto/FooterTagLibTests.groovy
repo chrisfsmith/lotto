@@ -1,9 +1,6 @@
 package lotto
 
-
-
-import grails.test.mixin.*
-import org.junit.*
+import grails.test.mixin.TestFor
 
 /**
  * See the API for {@link grails.test.mixin.web.GroovyPageUnitTestMixin} for usage instructions
@@ -11,7 +8,12 @@ import org.junit.*
 @TestFor(FooterTagLib)
 class FooterTagLibTests {
 
-    void testSomething() {
-        fail "Implement me"
+    void testThisYear() {
+        def todayYear = new Date().getAt(Calendar.YEAR)
+        assert applyTemplate('<lotto:thisYear/>') == "${todayYear}"
+    }
+
+    void testCopyright() {
+        assert applyTemplate('<lotto:copyright startYear="2001">Copyright Test</lotto:copyright>') == '&copy; 2001 - 2012 Copyright Test'
     }
 }
