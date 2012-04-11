@@ -18,6 +18,11 @@
             <li><g:link class="create" action="create"><g:message code="default.new.label"
                                                                   args="[entityName]"/></g:link></li>
         </sec:access>
+        <sec:ifNotGranted roles="ROLE_ADMIN">
+            <g:set var="regName" value="${message(code: 'registration.label', default: 'Registration')}"/>
+            <li><g:link class="list" controller="registration" action="list"><g:message code="default.list.label"
+                                                                                        args="[regName]"/></g:link></li>
+        </sec:ifNotGranted>
     </ul>
 </div>
 
