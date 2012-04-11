@@ -1,11 +1,8 @@
 package lotto
 
-
-
-import grails.test.mixin.*
-import org.junit.*
 import grails.buildtestdata.mixin.Build
-import grails.plugins.springsecurity.SpringSecurityService
+import grails.test.mixin.Mock
+import grails.test.mixin.TestFor
 
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
@@ -86,36 +83,4 @@ class LotteryServiceTests {
 
         assertFalse service.pick(lottery, user, event)
     }
-
-//    void testFindLotteriesWithAllHavingTheSameUser() {
-//        def user = User.build(springSecurityService: setUpMockSpringSecurityService(true))
-//        def lottery1 = Lottery.build(users: [user])
-//        lottery1.save()
-//        def lottery2 = Lottery.build(users: [user])
-//        lottery2.save()
-//        def lottery3 = Lottery.build(users: [user])
-//        lottery3.save()
-//
-//        def results = service.findLotteriesByUser(user, [max: 2, offset: 0])
-//
-//        assert 3 == results.totalCount
-//        assert 2 == results.size()
-//        assert lottery1 == results[0]
-//        assert lottery2 == results[1]
-//    }
-//
-//    def setUpMockSpringSecurityService = { boolean loggedIn ->
-//        def user = new User(firstName: "Jon", lastName: "Doe")
-//        def springSecurityService = new Object()
-//        springSecurityService.metaClass.isLoggedIn {-> return loggedIn }
-//        springSecurityService.metaClass.getProperty = { propertyName ->
-//            if (propertyName == 'currentUser') { user }
-//            else { delegate }
-//        }
-//
-//        springSecurityService.metaClass.encodePassword {password -> password }
-//
-//        springSecurityService
-//    }
-
 }
