@@ -50,11 +50,12 @@ grails.project.dependency.resolution = {
         build ":tomcat:$grailsVersion"
 
         // plugins I added
-        compile ":spring-security-core:1.2.7.2"
+        compile ":spring-security-core:1.2.7.3"
         compile ":build-test-data:2.0.2"
-        test ":code-coverage:1.2.5"
-        compile ":searchable:0.6.3"
+        compile ":database-migration:1.0"
+        //compile ":searchable:0.6.3"
         compile ":jquery-ui:1.8.15"
         compile ":blueprint:1.0.2"
+        test ":code-coverage:1.2.5"
     }
 }

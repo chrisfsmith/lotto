@@ -23,7 +23,7 @@ class Event {
         sort "startDate"
     }
 
-    static searchable = true
+//    static searchable = true
 
     String toString() {
         "${name} (${startDate.format('MM/dd/yyyy HH:mm')})"

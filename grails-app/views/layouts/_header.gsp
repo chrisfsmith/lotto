@@ -1,4 +1,4 @@
-<g:render template="/layouts/eventSearch"/>
+%{--<g:render template="/layouts/eventSearch"/>--}%
 
 <div id="header">
     <p><a class="header-main" href="${resource(dir: '')}">Event Lotto</a></p>
