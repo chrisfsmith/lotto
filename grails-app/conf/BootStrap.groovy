@@ -17,6 +17,7 @@ class BootStrap {
                 if (Role.count == 0) {
                     adminRole = new Role(authority: 'ROLE_ADMIN').save(flush: true)
                     userRole = new Role(authority: 'ROLE_USER').save(flush: true)
+                    assert Role.count() == 2
                 }
 
                 def adminUser
@@ -44,6 +45,7 @@ class BootStrap {
                     user5 = new User(username: 'user5', enabled: true, password: 'password',
                             firstName: 'Ericia', lastName: 'Doe', email: 'ericia@doe.com')
                     user5.save(flush: true)
+                    assert User.count() == 6
                 }
 
                 if (UserRole.count == 0) {
@@ -53,11 +55,8 @@ class BootStrap {
                     UserRole.create user3, userRole, true
                     UserRole.create user4, userRole, true
                     UserRole.create user5, userRole, true
+                    assert UserRole.count() == 6
                 }
-
-                assert User.count() == 6
-                assert Role.count() == 2
-                assert UserRole.count() == 6
 
                 def lottery1
                 def lottery2
@@ -100,7 +99,34 @@ class BootStrap {
 
                 break
 
-            case "production" : break
+            case "production":
+                def adminRole
+                def userRole
+                if (Role.count == 0) {
+                    adminRole = new Role(authority: 'ROLE_ADMIN').save(flush: true)
+                    userRole = new Role(authority: 'ROLE_USER').save(flush: true)
+                    assert Role.count() == 2
+                }
+
+                def adminUser
+                def user1
+                if (User.count == 0) {
+                    adminUser = new User(username: 'admin', enabled: true, password: 'password',
+                            firstName: 'Super', lastName: 'Doe', email: 'super@doe.com')
+                    adminUser.save(flush: true)
+                    user1 = new User(username: 'user1', enabled: true, password: 'password',
+                            firstName: 'Anna', lastName: 'Doe', email: 'anna@doe.com')
+                    user1.save(flush: true)
+                    assert User.count() == 2
+                }
+
+                if (UserRole.count == 0) {
+                    UserRole.create adminUser, adminRole, true
+                    UserRole.create user1, userRole, true
+                    assert UserRole.count() == 2
+                }
+
+                break
         }
 
         def destroy = {
