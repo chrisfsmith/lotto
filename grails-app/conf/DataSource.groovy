@@ -16,21 +16,21 @@ hibernate {
 environments {
     development {
         dataSource {
-            dbCreate = 'validate' // one of 'create', 'create-drop', 'update', 'validate', ''
+            dbCreate = '' // one of 'create', 'create-drop', 'update', 'validate', ''
 //            url = "jdbc:h2:mem:devDb;MVCC=TRUE"
             url = "jdbc:mysql://localhost:3306/lotto_dev?autoreconnect=true"
         }
     }
     test {
         dataSource {
-            dbCreate = 'validate'
+            dbCreate = ''
 //            url = "jdbc:h2:mem:testDb;MVCC=TRUE"
             url = "jdbc:mysql://localhost:3306/lotto_test?autoreconnect=true"
         }
     }
     production {
         dataSource {
-            dbCreate = 'validate'
+            dbCreate = ''
 //            url = "jdbc:h2:prodDb;MVCC=TRUE"
             url = "jdbc:mysql://localhost:3306/lotto?autoreconnect=true"
             pooled = true

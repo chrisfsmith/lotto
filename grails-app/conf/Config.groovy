@@ -100,3 +100,7 @@ log4j = {
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'lotto.User'
 grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'lotto.UserRole'
 grails.plugins.springsecurity.authority.className = 'lotto.Role'
+
+// Added for Database Migration plugin:
+grails.plugin.databasemigration.updateOnStart = true
+grails.plugin.databasemigration.updateOnStartFileNames = ["changelog.groovy"]

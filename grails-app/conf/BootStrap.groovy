@@ -110,6 +110,7 @@ class BootStrap {
 
                 def adminUser
                 def user1
+                def user2
                 if (User.count == 0) {
                     adminUser = new User(username: 'admin', enabled: true, password: 'password',
                             firstName: 'Super', lastName: 'Doe', email: 'super@doe.com')
@@ -117,13 +118,17 @@ class BootStrap {
                     user1 = new User(username: 'user1', enabled: true, password: 'password',
                             firstName: 'Anna', lastName: 'Doe', email: 'anna@doe.com')
                     user1.save(flush: true)
-                    assert User.count() == 2
+                    user2 = new User(username: 'user2', enabled: true, password: 'password',
+                            firstName: 'Bob', lastName: 'Doe', email: 'bob@doe.com')
+                    user2.save(flush: true)
+                    assert User.count() == 3
                 }
 
                 if (UserRole.count == 0) {
                     UserRole.create adminUser, adminRole, true
                     UserRole.create user1, userRole, true
-                    assert UserRole.count() == 2
+                    UserRole.create user2, userRole, true
+                    assert UserRole.count() == 3
                 }
 
                 break
