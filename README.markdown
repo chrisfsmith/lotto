@@ -8,8 +8,9 @@ will create the tables during application startup ($ grails run-app).
 
 ##To create the database:
     
-    * $ mysql -u root -p
-    * mysql> create database lotto_dev;
-    * mysql> grant all on lotto_dev.* to grails@localhost identified by 'server';
-    * mysql> exit
+    $ mysql -u root -p
+    
+    mysql> create database lotto_dev;
+    mysql> grant all on lotto_dev.* to grails@localhost identified by 'server';
+    mysql> exit
 
